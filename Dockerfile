@@ -29,7 +29,7 @@ RUN npm install --omit=dev
 # Copy built application and generated Prisma client from the builder stage
 COPY --chown=node:node --from=builder /app/src ./src
 COPY --chown=node:node --from=builder /app/prisma ./prisma
-COPY --chown=node:node --from=builder /app/node_modules/.prisma ./.prisma
+COPY --chown=node:node --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 EXPOSE 8000
 

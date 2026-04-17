@@ -1,0 +1,21 @@
+{
+  "name": "Untitled request",
+  "rank": "auntit17763945392831",
+  "request": {
+    "type": "http",
+    "url": "localhost:8000/api/matches",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"sport\": \"Football\",\n  \"homeTeam\": \"Real Madrid\",\n  \"awayTeam\": \"Barcelona\",\n  \"startTime\": \"2026-04-18T19:00:00.000Z\",\n  \"endTime\": \"2026-04-18T21:00:00.000Z\",\n  \"homeScore\": 0,\n  \"awayScore\": 0\n}",
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    }
+  }
+}
