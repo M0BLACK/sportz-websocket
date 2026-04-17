@@ -1,7 +1,12 @@
 import { Router } from "express";
 import prisma from "../config/prisma.js";
-import { createMatchSchema, listMatchesQuerySchema } from "../validation/matches.js";
+import {
+  createMatchSchema,
+  listMatchesQuerySchema,
+} from "../validation/matches.js";
 import { getMatchStatus } from "../utils/match-status.js";
+
+
 const matchesRouter = Router();
 
 matchesRouter.get("/", async (req, res) => {
@@ -13,33 +18,29 @@ matchesRouter.get("/", async (req, res) => {
     return res.status(400).json({
       success: false,
       errors: "Invalid query parameters",
-      details: JSON.stringify(parsed.error),
+      details: parsed.error.issues,
     });
   }
-  const limit = Math.max(parsed.data.limit ?? 50, MATCHES_LIMIT);
+  const limit = Math.min(parsed.data.limit ?? 50, MATCHES_LIMIT);
   try {
     const matches = await prisma.match.findMany({
       orderBy: { createdAt: "desc" },
       take: limit,
     });
 
-    res.json({ success: true, data: matches });
-
+    return res.json({ success: true, data: matches });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       errors: "Failed to fetch matches",
       details: error.message,
     });
   }
-
-  res.json({ success: true, data: matches });
 });
 
 matchesRouter.post("/", async (req, res) => {
   const parsed = createMatchSchema.safeParse(req.body);
-  const { startTime, endTime, homeScore, awayScore } = parsed.data;
-
+  
   if (!parsed.success) {
     return res.status(400).json({
       success: false,
@@ -47,6 +48,8 @@ matchesRouter.post("/", async (req, res) => {
       details: JSON.stringify(parsed.error),
     });
   }
+
+  const { startTime, endTime, homeScore, awayScore } = parsed.data;
 
   try {
     const newMatch = await prisma.match.create({
@@ -64,35 +67,6 @@ matchesRouter.post("/", async (req, res) => {
     res.status(500).json({
       success: false,
       errors: "Failed to create match",
-      details: error.message,
-    });
-  }
-});
-
-matchesRouter.put("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const updateMatch = await prisma.match.update({
-      where: { id: parseInt(id) },
-      data: req.body,
-    });
-    res.json({ success: true, data: updateMatch });
-  } catch (error) {
-    res.status(500).json({ success: false, errors: "Failed to update match" });
-  }
-});
-
-matchesRouter.delete("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const deletedMatch = await prisma.match.delete({
-      where: { id: parseInt(id) },
-    });
-    res.json({ success: true, data: deletedMatch });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      errors: "Failed to delete match",
       details: error.message,
     });
   }
