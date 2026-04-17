@@ -34,6 +34,8 @@ export const createMatchSchema = z.object({
   ),
   homeScore: z.coerce.number().int().min(0).optional(),
   awayScore: z.coerce.number().int().min(0).optional(),
+  // If status needs to be validated from input:
+status: z.enum([MATCH_STATUS.SCHEDULED, MATCH_STATUS.LIVE, MATCH_STATUS.FINISHED]).optional(),
 }).superRefine((data, ctx) => {
   if (data.startTime && data.endTime) {
     const start = new Date(data.startTime).getTime();

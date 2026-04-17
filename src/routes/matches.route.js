@@ -12,7 +12,6 @@ const matchesRouter = Router();
 matchesRouter.get("/", async (req, res) => {
   const parsed = listMatchesQuerySchema.safeParse(req.query);
   const MATCHES_LIMIT = 100;
-  console.log("Parsed query parameters:", parsed);
 
   if (!parsed.success) {
     return res.status(400).json({
@@ -45,7 +44,7 @@ matchesRouter.post("/", async (req, res) => {
     return res.status(400).json({
       success: false,
       errors: "Invalid payload",
-      details: JSON.stringify(parsed.error),
+      details: parsed.error.issues,
     });
   }
 
@@ -62,9 +61,9 @@ matchesRouter.post("/", async (req, res) => {
         status: getMatchStatus(new Date(startTime), new Date(endTime)),
       },
     });
-    res.json({ success: true, data: newMatch });
+    return res.json({ success: true, data: newMatch });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       errors: "Failed to create match",
       details: error.message,

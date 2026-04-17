@@ -1,7 +1,3 @@
-
-# 
-environments
-
 # Logs
 logs
 *.log
@@ -156,7 +152,6 @@ requestly.json
 
 # Local Requestly/Postman requests
 *request*.json
-.gitignorecreate-match-collection.json
 
 # Local Requestly/Postman environments
 Sportz/environments/
