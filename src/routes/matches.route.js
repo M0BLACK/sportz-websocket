@@ -30,8 +30,7 @@ matchesRouter.get("/", async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       success: false,
-      errors: "Failed to fetch matches",
-      details: error.message,
+      errors: "Failed to fetch matches"
     });
   }
 });
