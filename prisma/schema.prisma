@@ -21,7 +21,7 @@ enum MatchStatus {
 }
 
 model Match {
-  id        String      @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   sport     String
   homeTeam  String      @map("home_team")
   awayTeam  String      @map("away_team")
@@ -38,8 +38,8 @@ model Match {
 }
 
 model Commentary {
-  id        String   @id @default(uuid())
-  matchId   String   @map("match_id")
+  id        Int   @id @default(autoincrement())
+  matchId   Int   @map("match_id")
   minute    Int
   sequence  Int
   period    String

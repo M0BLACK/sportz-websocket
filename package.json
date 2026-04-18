@@ -15,10 +15,11 @@
     "@prisma/client": "^7.7.0",
     "dotnet": "^1.1.4",
     "express": "^5.2.1",
-    "nodemon": "^3.1.14",
-    "pg": "^8.20.0"
+    "pg": "^8.20.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
+    "nodemon": "^3.1.14",
     "prisma": "^7.7.0"
   }
 }
