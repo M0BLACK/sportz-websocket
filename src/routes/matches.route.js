@@ -6,7 +6,6 @@ import {
 } from "../validation/matches.js";
 import { getMatchStatus } from "../utils/match-status.js";
 
-
 const matchesRouter = Router();
 
 matchesRouter.get("/", async (req, res) => {
@@ -39,7 +38,7 @@ matchesRouter.get("/", async (req, res) => {
 
 matchesRouter.post("/", async (req, res) => {
   const parsed = createMatchSchema.safeParse(req.body);
-  
+
   if (!parsed.success) {
     return res.status(400).json({
       success: false,
@@ -66,7 +65,6 @@ matchesRouter.post("/", async (req, res) => {
     return res.status(500).json({
       success: false,
       errors: "Failed to create match",
-      details: error.message,
     });
   }
 });
