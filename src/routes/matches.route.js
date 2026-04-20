@@ -30,7 +30,7 @@ matchesRouter.get("/", async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       success: false,
-      errors: "Failed to fetch matches"
+      errors: "Failed to fetch matches",
     });
   }
 });
@@ -59,6 +59,9 @@ matchesRouter.post("/", async (req, res) => {
         status: getMatchStatus(new Date(startTime), new Date(endTime)),
       },
     });
+    if (res.app.locals.broadcastCreatedMatch) {
+      res.app.locals.broadcastCreatedMatch(newMatch);
+    }
     return res.json({ success: true, data: newMatch });
   } catch (error) {
     return res.status(500).json({
