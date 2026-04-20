@@ -7,10 +7,12 @@ function sendJson(socket, payload) {
 }
 
 function broadcast(wss, payload) {
-  for (const client of wss.clients) {
-    if (client.readyState !== WebSocket.OPEN) return;
+  const msg = JSON.stringify(payload);
 
-    client.send(JSON.stringify(payload));
+  for (const client of wss.clients) {
+    if (client.readyState !== WebSocket.OPEN) continue;
+
+    client.send(msg);
   }
 }
 
@@ -27,9 +29,9 @@ export function attachWebSocketToServer(server) {
 
   wss.on("error", console.error);
 
-  function broadcastCreatedMatch (match) {
+  function broadcastCreatedMatch(match) {
     broadcast(wss, { type: "MATCH_CREATED", data: match });
-  };
+  }
 
   wss.on("close", () => {
     console.log("WebSocket server closed");
