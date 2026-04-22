@@ -24,7 +24,28 @@ export function attachWebSocketToServer(server) {
   });
 
   wss.on("connection", (socket) => {
+    socket.isAlive = true;
+    
     sendJson(socket, { type: "Welcome" });
+
+    socket.on("pong", () => {socket.isAlive = true; } );
+  });
+
+  const interval = setInterval(() => {
+    wss.clients.forEach((socket) => {
+      if (!socket.isAlive) {
+        socket.terminate();
+        return;
+      }
+
+      socket.isAlive = false;
+      socket.ping();
+    });
+  }, 30000);
+
+  wss.on("close", () => {
+    clearInterval(interval);
+    console.log("WebSocket server closed");
   });
 
   wss.on("error", console.error);
@@ -33,9 +54,6 @@ export function attachWebSocketToServer(server) {
     broadcast(wss, { type: "MATCH_CREATED", data: match });
   }
 
-  wss.on("close", () => {
-    console.log("WebSocket server closed");
-  });
 
   return { broadcastCreatedMatch };
 }
