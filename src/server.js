@@ -3,6 +3,7 @@ import { config } from "dotenv";
 import http from "http";
 import matchesRouter from "./routes/matches.route.js";
 import { attachWebSocketToServer } from "./ws/WsServer.js";
+import commentaryRouters from "./routes/commentary.route.js";
 
 config();
 
@@ -15,9 +16,11 @@ const server = http.createServer(app);
 app.use(express.json());
 
 app.use("/api/matches", matchesRouter);
+app.use("/api/match/:id/commentary", commentaryRouters)
 
-const { broadcastCreatedMatch } = attachWebSocketToServer(server);
+const { broadcastCreatedMatch, broadcastCommentary } = attachWebSocketToServer(server);
 app.locals.broadcastCreatedMatch = broadcastCreatedMatch;
+app.locals.broadcastCommentary = broadcastCommentary;
 
 app.get("/", (req, res) => {
   res.send("Welcome to Sportz app API...");
