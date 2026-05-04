@@ -14,9 +14,22 @@ const host = process.env.HOST || "0.0.0.0";
 const server = http.createServer(app);
 
 app.use(express.json());
+// allow CORS for development
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS",
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept",
+  );
+  next();
+});
 
 app.use("/api/matches", matchesRouter);
-app.use("/api/match/:id/commentary", commentaryRouters)
+app.use("/api/matches/:id/commentary", commentaryRouters)
 
 const { broadcastCreatedMatch, broadcastCommentary } = attachWebSocketToServer(server);
 app.locals.broadcastCreatedMatch = broadcastCreatedMatch;
