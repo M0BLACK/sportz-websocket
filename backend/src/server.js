@@ -1,6 +1,7 @@
 import express from "express";
 import { config } from "dotenv";
 import http from "http";
+import cors from "cors";
 import matchesRouter from "./routes/matches.route.js";
 import { attachWebSocketToServer } from "./ws/WsServer.js";
 import commentaryRouters from "./routes/commentary.route.js";
@@ -15,18 +16,10 @@ const server = http.createServer(app);
 
 app.use(express.json());
 // allow CORS for development
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTIONS",
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept",
-  );
-  next();
-});
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",")
+  : ["http://localhost:3000"];
+app.use(cors({ origin: allowedOrigins, methods: ["GET","POST","PUT","DELETE"] }));
 
 app.use("/api/matches", matchesRouter);
 app.use("/api/matches/:id/commentary", commentaryRouters)

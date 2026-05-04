@@ -107,7 +107,7 @@ matchesRouter.patch("/:id/score", async (req, res) => {
       return res.status(404).json({ error: "Match not found" });
     }
 
-    res.status(200).json({ data: updated });
+    res.status(200).json({success: true, data: updated });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to update score" });
