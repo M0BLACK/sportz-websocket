@@ -94,7 +94,7 @@ export function attachWebSocketToServer(server) {
     
     socket.subscriptions = new Set();
 
-    sendJson(socket, { type: "Welcome" });
+    sendJson(socket, { type: "welcome" });
 
 
     socket.on("message", (data) => {
@@ -128,12 +128,12 @@ export function attachWebSocketToServer(server) {
   wss.on("error", console.error);
 
   function broadcastCreatedMatch(match) {
-    broadcastToAll(wss, { type: "MATCH_CREATED", data: match });
+    broadcastToAll(wss, { type: "match_created", data: match });
   }
 
   function broadcastCommentary(matchId, commentary) {
     console.log(`Broadcasting commentary for match ${matchId}:`, commentary);
-    broadcastToMatch(matchId, { type: "COMMENTARY", data: commentary });
+    broadcastToMatch(matchId, { type: "commentary", data: commentary });
   }
 
   return { broadcastCreatedMatch, broadcastCommentary };
