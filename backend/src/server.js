@@ -17,9 +17,9 @@ const server = http.createServer(app);
 app.use(express.json());
 // allow CORS for development
 const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(",")
+  ? process.env.ALLOWED_ORIGINS.split(",").map(o => o.trim()).filter(Boolean)
   : ["http://localhost:3000"];
-app.use(cors({ origin: allowedOrigins, methods: ["GET","POST","PUT","DELETE"] }));
+app.use(cors({ origin: allowedOrigins, methods: ["GET","POST","PUT","PATCH","DELETE"] }));
 
 app.use("/api/matches", matchesRouter);
 app.use("/api/matches/:id/commentary", commentaryRouters)
