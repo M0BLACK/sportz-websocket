@@ -3,11 +3,19 @@ export function extractRuns(entry) {
     return null;
   }
 
-  if (Number.isFinite(entry.runs)) {
+  if (!match || typeof match !== "object") {
+    return null;
+  }
+
+  if (Number.isFinite(entry.runs) && entry.runs >= 0) {
     return entry.runs;
   }
 
-  if (entry.metadata && Number.isFinite(entry.metadata.runs)) {
+  if (
+    entry.metadata &&
+    Number.isFinite(entry.metadata.runs) &&
+    entry.metadata.runs >= 0
+  ) {
     return entry.metadata.runs;
   }
 
@@ -33,8 +41,8 @@ export function scoreDeltaFromEntry(entry, match) {
 
   if (entry.scoreDelta && typeof entry.scoreDelta === "object") {
     return {
-      home: Number(entry.scoreDelta.home || 0),
-      away: Number(entry.scoreDelta.away || 0),
+      home: Number(entry.scoreDelta.home ?? 0),
+      away: Number(entry.scoreDelta.away ?? 0),
     };
   }
 

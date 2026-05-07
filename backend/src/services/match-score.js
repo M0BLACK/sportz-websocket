@@ -33,6 +33,7 @@ export async function loadMatchForScoring(tx, matchId) {
       where: { id: matchId },
       data: { status: nextStatus },
     });
+    match.status = nextStatus;
   });
 
   return match;

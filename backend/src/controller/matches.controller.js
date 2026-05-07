@@ -13,7 +13,6 @@ import {
   HttpError,
 } from "../services/match-score.js";
 
-
 export const getMatches = async (req, res) => {
   const parsed = listMatchesQuerySchema.safeParse(req.query);
   const MATCHES_LIMIT = 100;
@@ -39,7 +38,7 @@ export const getMatches = async (req, res) => {
       errors: "Failed to fetch matches",
     });
   }
-}
+};
 
 export const createMatch = async (req, res) => {
   const parsed = createMatchSchema.safeParse(req.body);
@@ -85,55 +84,67 @@ export const createMatch = async (req, res) => {
       errors: "Failed to create match",
     });
   }
-}
+};
 
 export const updateMatchScore = async (req, res) => {
-    const paramsParsed = matchIdParamSchema.safeParse(req.params);
-    if (!paramsParsed.success) {
-        return res
-            .status(400)
-            .json({ error: 'Invalid match id', details: paramsParsed.error.issues });
-    }
+  const paramsParsed = matchIdParamSchema.safeParse(req.params);
+  if (!paramsParsed.success) {
+    return res
+      .status(400)
+      .json({
+        success: false,
+        error: "Invalid match id",
+        details: paramsParsed.error.issues,
+      });
+  }
 
-    const bodyParsed = updateScoreSchema.safeParse(req.body);
-    if (!bodyParsed.success) {
-        return res
-            .status(400)
-            .json({ error: 'Invalid payload', details: bodyParsed.error.issues });
-    }
+  const bodyParsed = updateScoreSchema.safeParse(req.body);
+  if (!bodyParsed.success) {
+    return res
+      .status(400)
+      .json({
+        success: false,
+        error: "Invalid payload",
+        details: bodyParsed.error.issues,
+      });
+  }
 
-    const matchId = paramsParsed.data.id;
+  const matchId = paramsParsed.data.id;
 
-    try {
-      const updated = await prisma.$transaction(async (tx) => {
-        const existing = await loadMatchForScoring(tx, matchId);
-        if (!existing) {
+  try {
+    const updated = await prisma.$transaction(async (tx) => {
+      const existing = await loadMatchForScoring(tx, matchId);
+      if (!existing) {
         throw new HttpError(404, "Match not found");
-        }
+      }
 
-        // Maintain old behavior: only allow score updates while LIVE.
-        assertMatchLive(existing);
+      // Maintain old behavior: only allow score updates while LIVE.
+      assertMatchLive(existing);
 
-        return setMatchScore(tx, matchId, {
+      return setMatchScore(tx, matchId, {
         homeScore: bodyParsed.data.homeScore,
         awayScore: bodyParsed.data.awayScore,
-        });
       });
+    });
 
-        if (res.app.locals.broadcastMatchUpdate) {
-            res.app.locals.broadcastMatchUpdate(matchId, {
-                homeScore: updated.homeScore,
-                awayScore: updated.awayScore,
-            });
-        }
-
-        res.json({ data: updated });
-    } catch (err) {
-      if (err instanceof HttpError) {
-        return res.status(err.statusCode).json({ error: err.message });
+    try {
+      if (res.app.locals.broadcastMatchUpdate) {
+        res.app.locals.broadcastMatchUpdate(matchId, {
+          homeScore: updated.homeScore,
+          awayScore: updated.awayScore,
+        });
       }
-      res.status(500).json({ error: 'Failed to update score' });
+    } catch (broadcastErr) {
+      console.error("Failed to broadcast SCORE_UPDATED event", broadcastErr);
     }
-}
 
-
+    res.json({ success: true, data: updated });
+  } catch (err) {
+    if (err instanceof HttpError) {
+      return res
+        .status(err.statusCode)
+        .json({ success: false, error: err.message });
+    }
+    res.status(500).json({ success: false, error: "Failed to update score" });
+  }
+};
