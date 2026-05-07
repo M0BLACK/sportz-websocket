@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:15
-    container_name: sportz-db
+    container_name: Sportly-db
     env_file:
       - ./backend/.env
     ports:
@@ -18,7 +18,7 @@ services:
   frontend:
     build: 
       context: ./frontend
-    container_name: sportz-frontend
+    container_name: Sportly-frontend
     ports:
       - "3000:3000"
     command: npm run dev
@@ -32,7 +32,7 @@ services:
     build: 
       context: ./backend
       target: builder
-    container_name: sportz-backend
+    container_name: Sportly-backend
     env_file:
       - ./backend/.env
     ports:

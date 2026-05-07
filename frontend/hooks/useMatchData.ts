@@ -37,9 +37,6 @@ export const useMatchData = (): UseMatchData => {
   const handleWSMessage = useCallback((msg: WSMessage) => {
     switch (msg.type) {
       case "score_update":
-        if (!subscribedMatchIdsRef.current.has(String(msg.matchId))) {
-          return;
-        }
         setMatches((prevMatches) =>
           prevMatches.map((m) => {
             // Loose equality check for ID (string vs number)
@@ -108,13 +105,16 @@ export const useMatchData = (): UseMatchData => {
         return nextMatches.map((match) => {
           const matchId = String(match.id);
           const prev = prevById.get(matchId);
-          if (prev && !subscribedMatchIdsRef.current.has(matchId)) {
+          // If a match is actively subscribed, treat WebSocket as the
+          // source-of-truth to avoid polling overwriting the live score.
+          // Otherwise, accept REST scores so non-subscribed cards still update.
+          if (prev && subscribedMatchIdsRef.current.has(matchId)) {
             return {
               ...match,
               homeScore: prev.homeScore,
               awayScore: prev.awayScore,
             };
-          }
+          } 
           return match;
         });
       });

@@ -5,8 +5,6 @@ export const fetchMatches = async (limit = 50): Promise<MatchResponse> => {
   try {
     const response = await fetch(`${API_BASE_URL}/api/matches?limit=${limit}`, {
       method: "GET",
-      // Include credentials if your API requires authentication (e.g., cookies, tokens)
-      // credentials: "include",
     });
 
     if (!response.ok) {

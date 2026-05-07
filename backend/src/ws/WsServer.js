@@ -90,12 +90,13 @@ export function attachWebSocketToServer(server) {
 
   wss.on("connection", (socket) => {
     socket.isAlive = true;
-    socket.on("pong", () => {socket.isAlive = true;});
-    
+    socket.on("pong", () => {
+      socket.isAlive = true;
+    });
+
     socket.subscriptions = new Set();
 
     sendJson(socket, { type: "welcome" });
-
 
     socket.on("message", (data) => {
       handleMessage(socket, data);
@@ -136,5 +137,22 @@ export function attachWebSocketToServer(server) {
     broadcastToMatch(matchId, { type: "commentary", data: commentary });
   }
 
-  return { broadcastCreatedMatch, broadcastCommentary };
+  function broadcastMatchUpdate(matchId, score) {
+    const payload = {
+      type: "score_update",
+      matchId,
+      data: {
+        homeScore: score.homeScore,
+        awayScore: score.awayScore,
+      },
+    };
+
+    // Global broadcast so match cards update even without subscribing.
+    broadcastToAll(wss, payload);
+
+    // Keep match-scoped broadcast for clients that rely on subscriptions.
+    broadcastToMatch(matchId, payload);
+}
+
+  return { broadcastCreatedMatch, broadcastCommentary, broadcastMatchUpdate };
 }

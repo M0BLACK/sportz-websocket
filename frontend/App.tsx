@@ -41,10 +41,10 @@ const App: React.FC = () => {
     <div className="min-h-screen p-4 md:p-8 font-sans">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header Section */}
-        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-brand-yellow border-2 border-black rounded-2xl p-6 shadow-hard">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-brand-accent border border-slate-700 rounded-xl p-6 shadow-lg shadow-black/50">
           <div>
-            <h1 className="text-3xl font-black tracking-tight text-brand-dark mb-1">
-              Spotrz
+            <h1 className="text-3xl font-black tracking-tight text-brand-text-main mb-1">
+              Spotrly
             </h1>
             <p className="text-sm font-medium opacity-80">
               Real-time match data demo
@@ -73,14 +73,14 @@ const App: React.FC = () => {
               </span>
             </div>
             {newMatchesCount > 0 && (
-              <div className="flex items-center justify-between gap-3 bg-brand-yellow border-2 border-black rounded-xl px-4 py-3 shadow-hard-sm">
+              <div className="flex items-center justify-between gap-3 bg-brand-accent border border-slate-700 rounded-xl px-4 py-3 shadow-lg shadow-black/50-sm">
                 <span className="text-sm font-bold">
                   {newMatchesCount} new match{newMatchesCount > 1 ? "es..." : ""}{" "}
                   added
                 </span>
                 <button
                   onClick={dismissNewMatches}
-                  className="px-3 py-1 rounded-full text-xs font-bold border-2 border-black bg-white hover:bg-gray-50 transition-all"
+                  className="px-3 py-1 rounded-full text-xs font-bold border border-slate-700 bg-brand-card hover:bg-brand-bg transition-all"
                 >
                   Dismiss
                 </button>
@@ -88,15 +88,15 @@ const App: React.FC = () => {
             )}
 
             {isLoading && (
-              <div className="p-12 text-center border-2 border-dashed border-gray-300 rounded-2xl">
+              <div className="p-12 text-center border border-dashed border-gray-300 rounded-xl">
                 <div className="animate-spin w-8 h-8 border-4 border-brand-yellow border-t-black rounded-full mx-auto mb-4"></div>
-                <p className="font-medium text-gray-500">Loading matches...</p>
+                <p className="font-medium text-brand-text-muted">Loading matches...</p>
               </div>
             )}
 
             {error && (
-              <div className="bg-red-50 border-2 border-red-500 text-red-900 p-6 rounded-xl text-center shadow-sm">
-                <div className="flex justify-center mb-3 text-red-500">
+              <div className="bg-red-50 border border-red-500 text-red-900 p-6 rounded-xl text-center shadow-sm">
+                <div className="flex justify-center mb-3 text-brand-live">
                   <svg
                     className="w-10 h-10"
                     fill="none"
@@ -121,7 +121,7 @@ const App: React.FC = () => {
                 </p>
                 <button
                   onClick={reloadMatches}
-                  className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold text-sm transition-all shadow-md active:translate-y-0.5"
+                  className="px-6 py-2 bg-brand-live hover:bg-red-700 text-white rounded-lg font-bold text-sm transition-all shadow-md active:translate-y-0.5"
                 >
                   Retry Connection
                 </button>
@@ -129,7 +129,7 @@ const App: React.FC = () => {
             )}
 
             {!isLoading && !error && matches.length === 0 && (
-              <div className="p-12 text-center border-2 border-black rounded-2xl bg-gray-50">
+              <div className="p-12 text-center border border-slate-700 rounded-xl bg-brand-bg">
                 <p className="font-bold text-lg">No matches found</p>
               </div>
             )}
@@ -148,7 +148,7 @@ const App: React.FC = () => {
             </div>
             {!isLoading && !error && matches.length > pageSize && (
               <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-                <span className="text-xs font-medium text-gray-500">
+                <span className="text-xs font-medium text-brand-text-muted">
                   Page {currentPage} of {totalPages}
                 </span>
                 <div className="flex items-center gap-2">
@@ -158,8 +158,8 @@ const App: React.FC = () => {
                     }
                     disabled={currentPage === 1}
                     className={`
-                      px-3 py-1.5 rounded-lg text-xs font-bold border-2 border-black transition-all
-                      ${currentPage === 1 ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-white hover:bg-gray-50"}
+                      px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-700 transition-all
+                      ${currentPage === 1 ? "bg-brand-bg text-brand-text-muted cursor-not-allowed" : "bg-brand-card hover:bg-brand-bg"}
                     `}
                   >
                     Prev
@@ -170,8 +170,8 @@ const App: React.FC = () => {
                     }
                     disabled={currentPage === totalPages}
                     className={`
-                      px-3 py-1.5 rounded-lg text-xs font-bold border-2 border-black transition-all
-                      ${currentPage === totalPages ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-white hover:bg-gray-50"}
+                      px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-700 transition-all
+                      ${currentPage === totalPages ? "bg-brand-bg text-brand-text-muted cursor-not-allowed" : "bg-brand-card hover:bg-brand-bg"}
                     `}
                   >
                     Next
@@ -192,40 +192,40 @@ const App: React.FC = () => {
         </div>
 
         {/* Documentation / Verification Section */}
-        <section className="mt-12 border-t-2 border-gray-200 pt-8">
-          <div className="bg-white border-2 border-black rounded-2xl p-6">
+        <section className="mt-12 border-t-2 border-slate-700 pt-8">
+          <div className="bg-brand-card border border-slate-700 rounded-xl p-6">
             <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
               <span className="bg-black text-white w-6 h-6 flex items-center justify-center rounded-full text-xs">
                 ?
               </span>
               Testing & Verification
             </h3>
-            <div className="grid md:grid-cols-2 gap-8 text-sm text-gray-600">
+            <div className="grid md:grid-cols-2 gap-8 text-sm text-brand-text-muted">
               <div>
-                <h4 className="font-bold text-black mb-2">Configuration</h4>
+                <h4 className="font-bold text-brand-text-main mb-2">Configuration</h4>
                 <ul className="list-disc list-inside space-y-1">
                   <li>
                     REST URL:{" "}
-                    <code className="bg-gray-100 px-1 rounded">
+                    <code className="bg-brand-bg px-1 rounded">
                       {API_BASE_URL}
                     </code>
                   </li>
                   <li>
                     WS URL:{" "}
-                    <code className="bg-gray-100 px-1 rounded">
+                    <code className="bg-brand-bg px-1 rounded">
                       {WS_BASE_URL}
                     </code>
                   </li>
                   <li>
                     Modify these in{" "}
-                    <code className="bg-gray-100 px-1 rounded">
-                      constants.ts
+                    <code className="bg-brand-bg px-1 rounded">
+                      frontend/constants.ts
                     </code>
                   </li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-bold text-black mb-2">How to Verify</h4>
+                <h4 className="font-bold text-brand-text-main mb-2">How to Verify</h4>
                 <p className="mb-2">
                   1. Click the action button on any card (it shows "Watch Live"
                   for live games).
@@ -235,11 +235,11 @@ const App: React.FC = () => {
                 </p>
                 <p>
                   3. Wait for{" "}
-                  <code className="text-xs bg-gray-100 p-0.5 border border-gray-300 rounded">
+                  <code className="text-xs bg-brand-bg p-0.5 border border-gray-300 rounded">
                     score_update
                   </code>{" "}
                   or{" "}
-                  <code className="text-xs bg-gray-100 p-0.5 border border-gray-300 rounded">
+                  <code className="text-xs bg-brand-bg p-0.5 border border-gray-300 rounded">
                     commentary
                   </code>{" "}
                   events from the server. The card score updates instantly, and
