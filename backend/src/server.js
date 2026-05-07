@@ -5,6 +5,7 @@ import cors from "cors";
 import matchesRouter from "./routes/matches.route.js";
 import { attachWebSocketToServer } from "./ws/WsServer.js";
 import commentaryRouters from "./routes/commentary.route.js";
+import { updateMatchScore } from "./controller/matches.controller.js";
 
 config();
 
@@ -22,14 +23,15 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
 app.use(cors({ origin: allowedOrigins, methods: ["GET","POST","PUT","PATCH","DELETE"] }));
 
 app.use("/api/matches", matchesRouter);
-app.use("/api/matches/:id/commentary", commentaryRouters)
+app.use("/api/matches/:id/commentary", commentaryRouters);
 
-const { broadcastCreatedMatch, broadcastCommentary } = attachWebSocketToServer(server);
+const { broadcastCreatedMatch, broadcastCommentary, broadcastMatchUpdate } = attachWebSocketToServer(server);
 app.locals.broadcastCreatedMatch = broadcastCreatedMatch;
 app.locals.broadcastCommentary = broadcastCommentary;
+app.locals.broadcastMatchUpdate = broadcastMatchUpdate;
 
 app.get("/", (req, res) => {
-  res.send("Welcome to Sportz app API...");
+  res.send("Welcome to Sportly app API...");
 });
 
 server.listen(PORT, () => {

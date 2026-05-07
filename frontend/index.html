@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Spotrz</title>
+    <title>Spotrly</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,13 +16,17 @@
               sans: ['Outfit', 'sans-serif'],
             },
             colors: {
-              'brand-yellow': '#FDE047', // Yellow-300 ish
-              'brand-blue': '#BAE6FD',   // Blue-200 ish
-              'brand-dark': '#18181B',
+              'brand-bg': '#0f172a',         // Deep slate
+              'brand-card': '#1e293b',       // Slightly lighter slate for cards
+              'brand-text-main': '#f8fafc',  // Off-white for primary text
+              'brand-text-muted': '#94a3b8', // Muted slate for secondary text
+              'brand-live': '#10b981',       // Neon emerald for "Live" dots
+              'brand-score': '#fbbf24',      // Amber yellow for scores
+              'brand-accent': '#3b82f6',     // Bright blue for buttons/links
             },
             boxShadow: {
-              'hard': '4px 4px 0px 0px #18181B',
-              'hard-sm': '2px 2px 0px 0px #18181B',
+              'hard': '4px 4px 0px 0px #020617',
+              'hard-sm': '2px 2px 0px 0px #020617',
             }
           }
         }
@@ -30,8 +34,8 @@
     </script>
     <style>
       body {
-        background-color: #FAFAFA;
-        color: #18181B;
+        background-color: #0f172a;
+        color: #f8fafc;
       }
     </style>
   <script type="importmap">

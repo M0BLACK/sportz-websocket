@@ -157,6 +157,9 @@ async function insertCommentary(matchId, entry) {
   if (entry.tags !== undefined && entry.tags !== null) {
     payload.tags = entry.tags;
   }
+  if (entry.scoreDelta !== undefined && entry.scoreDelta !== null) {
+    payload.scoreDelta = entry.scoreDelta;
+  }
 
   const response = await fetch(`${API_URL}/matches/${matchId}/commentary`, {
     method: "POST",
